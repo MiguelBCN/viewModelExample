@@ -16,10 +16,12 @@ import com.example.viewmodelexample.model.Ciudad;
 import com.example.viewmodelexample.model.ListCiudad;
 import com.example.viewmodelexample.modelView.CiudadViewModel;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     // Componentes de actividad
-    Button button1, button2;
+    Button button1, button2, button3;
     TextView result;
     CiudadViewModel viewModel;
 
@@ -29,13 +31,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
         viewModel= viewModel.getInstance();
-        viewModel.getCiudades().addCiudad(new Ciudad("Valencia",200,5));
-        result.setText(viewModel.getCiudades().toString());
+        viewModel.addCity(new Ciudad("Valencia",200,5));
+
+
+
+        final Observer<ListCiudad> listObserver =  new Observer<ListCiudad>() {
+            @Override
+            public void onChanged(ListCiudad ciudades) {
+                Log.d("live1", ciudades.toString());
+                System.out.println("LOLOOLLOLOLOLOL");
+                System.out.println(ciudades.toString());
+                result.setText(ciudades.toString());
+            }
+        };
+        viewModel.getCiudadesLiveData().observe(this, listObserver);
     }
 
     private void initComponents() {
         button1 = findViewById(R.id.button);
         button2=findViewById(R.id.button2);
+        button3 = findViewById(R.id.button3);
         result= findViewById(R.id.textView);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goToThirdActivity = new Intent(v.getContext(),ThirdActivity.class);
                 startActivity(goToThirdActivity);
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.sortByNaneCity();
+
             }
         });
     }

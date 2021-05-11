@@ -7,18 +7,21 @@ import androidx.lifecycle.ViewModel;
 import com.example.viewmodelexample.model.Ciudad;
 import com.example.viewmodelexample.model.ListCiudad;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CiudadViewModel extends ViewModel {
     private volatile static CiudadViewModel uniqueInstance;
-
-    private Ciudad ciudad;
-    public ListCiudad ciudades;
+    private ListCiudad ciudades;
     private MutableLiveData<ListCiudad> mData;
 
     private CiudadViewModel() {
         ciudades = new ListCiudad();
-        ciudad = new Ciudad("Barcelona", 500, 10);
+        mData = new MutableLiveData<ListCiudad>();
+
+
     }
 
     public static CiudadViewModel getInstance() {
@@ -26,6 +29,7 @@ public class CiudadViewModel extends ViewModel {
             synchronized (CiudadViewModel.class) {
                 if (uniqueInstance == null) {
                     uniqueInstance = new CiudadViewModel();
+                    // Load data from firebase
                 }
             }
         }
@@ -33,25 +37,17 @@ public class CiudadViewModel extends ViewModel {
     }
     public LiveData<ListCiudad> getCiudadesLiveData(){
         if (mData == null) {
-            mData = new MutableLiveData<>();
+            mData = new MutableLiveData<ListCiudad>();
         }
         return mData;
-
+    }
+    public void addCity(Ciudad city){
+        ciudades.addCity(city);
+        mData.setValue(ciudades);
+    }
+    public void sortByNaneCity(){
+        ciudades.sortCityByPoblacion();
+        mData.setValue(ciudades);
     }
 
-    public Ciudad getCiudad() {
-        return ciudad;
-    }
-
-    public ListCiudad getCiudades() {
-        return ciudades;
-    }
-
-    public void setCiudad(Ciudad ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public void setCiudades(ListCiudad ciudades) {
-        this.ciudades = ciudades;
-    }
 }

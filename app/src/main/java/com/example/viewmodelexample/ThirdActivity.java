@@ -1,15 +1,20 @@
 package com.example.viewmodelexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.viewmodelexample.model.Ciudad;
+import com.example.viewmodelexample.model.ListCiudad;
 import com.example.viewmodelexample.modelView.CiudadViewModel;
+
+import java.util.List;
 
 public class ThirdActivity extends AppCompatActivity {
     // Componentes de actividad
@@ -23,8 +28,17 @@ public class ThirdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_third);
         initComponents();
        viewModel= viewModel.getInstance();
-        viewModel.getCiudades().addCiudad(new Ciudad("Aldisa",200,9));
-        result.setText(viewModel.getCiudades().toString());
+        viewModel.addCity(new Ciudad("Aldisa",100,9));
+        final Observer<ListCiudad> listObserver =  new Observer<ListCiudad>() {
+            @Override
+            public void onChanged(ListCiudad ciudades) {
+                Log.d("live1", ciudades.toString());
+                System.out.println("LOLOOLLOLOLOLOL");
+                System.out.println(ciudades.toString());
+                result.setText(ciudades.toString());
+            }
+        };
+        viewModel.getCiudadesLiveData().observe(this, listObserver);
     }
 
     private void initComponents() {

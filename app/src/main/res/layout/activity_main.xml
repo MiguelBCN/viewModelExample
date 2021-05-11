@@ -17,6 +17,12 @@
         android:gravity="center"/>
 
     <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ordenar por poblacion" />
+
+    <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,5 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TExt " />
+
 
 </LinearLayout>
